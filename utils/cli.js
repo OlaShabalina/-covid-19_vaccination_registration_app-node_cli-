@@ -25,15 +25,16 @@ const flags = {
 		desc: `Print CLI version`
 	},
 	new: {
-		type: `array`,
+		type: `string`,
 		alias: `n`,
-		desc: `Add a new user to the database`
+		desc: `Add a new user to the database`,
+		default: ``
 	},
 	list: {
 		type: `string`,
 		alias: `l`,
 		desc: `Print a list of registered users`,
-		default: `No users are registered yet`
+		default: ``
 	}
 };
 

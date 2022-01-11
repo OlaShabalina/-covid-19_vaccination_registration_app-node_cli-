@@ -4,8 +4,7 @@
 	"version": "1.0.0",
 	"license": "UNLICENSED",
 	"bin": {
-		"Covid_checkin_app": "index.js",
-		"New": "index.js"
+		"Covid_checkin_app": "index.js"
 	},
 	"author": {
 		"name": "Olga Shabalina",
@@ -31,8 +30,10 @@
 		"cli-meow-help": "^2.0.2",
 		"cli-welcome": "^2.2.2",
 		"dotenv": "^10.0.0",
+		"inquirer": "^8.2.0",
 		"meow": "^9.0.0",
-		"pg-promise": "^10.11.1"
+		"pg-promise": "^10.11.1",
+		"prompt-sync": "^4.2.0"
 	},
 	"devDependencies": {
 		"prettier": "^2.5.1"

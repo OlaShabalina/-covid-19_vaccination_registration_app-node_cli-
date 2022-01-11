@@ -1,12 +1,15 @@
 #!/usr/bin/env node
 
-/**
- * @author Olga Shabalina < >
- */
-
 const init = require('./utils/init');
 const cli = require('./utils/cli');
 const log = require('./utils/log');
+
+// inmporting request functions (add new user and list of users)
+const {
+	addUser,
+  listUsers
+} = require('./db.functions.js');
+
 
 // connecting to db file
 const db = require('./database');
@@ -16,11 +19,20 @@ const flags = cli.flags;
 const { clear, debug } = flags;
 
 (async () => {
+
 	init({ clear });
 	input.includes(`help`) && cli.showHelp(0);
 	debug && log(flags);
 
+	// printing out a list of users on comand "list"
 	if (input.includes('list')) {
-		const res = await db
+		listUsers();
 	}
+
+	// adding a new user
+	if (input.includes('new')) {
+		addUser();
+	}
+
+
 })();
