@@ -4,7 +4,7 @@ const meowHelp = require('cli-meow-help');
 const flags = {
 	clear: {
 		type: `boolean`,
-		default: true,
+		default: false,
 		alias: `c`,
 		desc: `Clear the console`
 	},
@@ -23,23 +23,13 @@ const flags = {
 		type: `boolean`,
 		alias: `v`,
 		desc: `Print CLI version`
-	},
-	new: {
-		type: `string`,
-		alias: `n`,
-		desc: `Add a new user to the database`,
-		default: ``
-	},
-	list: {
-		type: `string`,
-		alias: `l`,
-		desc: `Print a list of registered users`,
-		default: ``
 	}
 };
 
 const commands = {
-	help: { desc: `Print help info` }
+	help: { desc: `Print help info` },
+	new: { desc: `Add a new user to the database` },
+	list: { desc: `Print a list of registered users` }
 };
 
 const helpText = meowHelp({

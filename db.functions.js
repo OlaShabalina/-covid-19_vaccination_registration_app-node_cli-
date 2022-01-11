@@ -1,6 +1,15 @@
 // connecting to db file
 const db = require('./database');
-const prompt = require('prompt-sync')();
+const prompt = require('prompt-sync')(); // for user accepting input
+const vd = require('give-me-date'); // to validate the date input
+const { check } = require('prettier');
+const { proc } = require('./database');
+const { white } = require('cli-handle-error/node_modules/chalk');
+
+// setting up format for the input
+const options = {
+  format:  'dd/mm/yyyy'
+}
 
 // function to add a new user
 function addUser() {
@@ -29,7 +38,26 @@ function addUser() {
     if (isDateValid(date) && isNameValid(name)) {
       
       db.none("INSERT INTO reg_users (users_name, entry_date) VALUES ($1, $2);", [name, date])
-      .then(() => console.info('-----> New User has been added'))
+      .then(() => {
+
+        // show success message and ask user if they would like to see the full list of users
+        console.info('\x1b[36m%s\x1b[0m', '-----> New User has been added');
+
+        let showList = prompt('Would you like to see the full list of checked in users?: (Y/N): ')
+
+        // // will keep asking the user till them make a decision
+        // do {
+        //   showList = prompt('Please reply Y or N: ');
+        // } while (!showList || showList.trim().toLowerCase() !== 'y' || showList.trim().toLowerCase() !== 'n');
+
+        // once the user made a decision we have options
+        if (showList && showList.trim().toLowerCase() === 'y') {
+          listUsers();
+        } else if (showList && showList.trim().toLowerCase() === 'n') {
+          console.log('\x1b[36m%s\x1b[0m', 'No worries, feel free to do something else here!')
+        }
+
+      })
       .catch((error) => console.error(error))
     
     }
@@ -48,26 +76,31 @@ function isNameValid(name) {
 
 function isDateValid(date) {
 
-  //  date can only be today or later
-  let dateArray = date.trim().split('/');
+  // check if the data is indeed a date by using validator
 
-  const dateCleared = new Date(`${dateArray[2]}-${dateArray[1]}-${dateArray[0]}`);
-  const today = new Date();
+  if (vd.validate(date, options)) {
 
-  // checking if the date makes sense like 40/02/2022 won't pass even though the format looks correct
+    //  date can only be today or later
+    let dateArray = date.split('/');
 
-  return dateCleared instanceof Date && dateCleared >= today;
+    const dateCleared = new Date(`${dateArray[2]}-${dateArray[1]}-${dateArray[0]}`);
+    const today = new Date();
+
+    return dateCleared instanceof Date && dateCleared >= today;
+
+  } 
+
 }
 
 // generic validation function for the input values
 function isInputValid(input, validateFunction, errorMessage) {
   
   if (!input) {
-    console.error("Input cannot be blank.")
+    console.error('\x1b[31m%s\x1b[0m', 'Input cannot be blank.')
   } else if (!validateFunction(input)) {
-    console.error(errorMessage)
+    console.error('\x1b[31m%s\x1b[0m', errorMessage)
   } else {
-    console.info("Correct input")
+    console.info('\x1b[33m%s\x1b[0m','Correct input')
   } 
 }
 
@@ -77,7 +110,7 @@ const listUsers = () => {
 		.then(users => {
 
 
-			console.info(`     Users checked-in: (${users.length} in total)`);
+			console.info('\x1b[36m%s\x1b[0m',`     Users checked-in: (${users.length} in total)`);
 			// print out a list of users by looping through the data:
 			users.forEach(user => {
 				console.info(`Name: ${user.users_name}. Check-in date: ${user.reg_date}`);

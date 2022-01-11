@@ -1,6 +1,6 @@
 {
 	"name": "Covid_checkin_app",
-	"description": "Covid-19 check-in app",
+	"description": "Covid-19 check-in app. Type new to add new user. Type list to print the list of registered users. Type help too see the App details",
 	"version": "1.0.0",
 	"license": "UNLICENSED",
 	"bin": {
@@ -30,10 +30,11 @@
 		"cli-meow-help": "^2.0.2",
 		"cli-welcome": "^2.2.2",
 		"dotenv": "^10.0.0",
+		"give-me-date": "^1.0.2",
 		"inquirer": "^8.2.0",
 		"meow": "^9.0.0",
 		"pg-promise": "^10.11.1",
-		"prompt-sync": "^4.2.0"
+		"prompt-sync": "^4.1.6"
 	},
 	"devDependencies": {
 		"prettier": "^2.5.1"

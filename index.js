@@ -8,11 +8,7 @@ const log = require('./utils/log');
 const {
 	addUser,
   listUsers
-} = require('./db.functions.js');
-
-
-// connecting to db file
-const db = require('./database');
+} = require('./db.functions');
 
 const input = cli.input;
 const flags = cli.flags;
