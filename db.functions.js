@@ -21,15 +21,15 @@ function addUser() {
 
     do {
       date = prompt('Please enter your check-in date: ');
-      isInputValid(date, isDateValid, "You can not use the past date for your check-in!");
+      isInputValid(date, isDateValid, "Please enter a real date (today or in furure)");
     } while (!isDateValid(date) || (date.length < 1));
     
 
     // only if both inputs are valid - we same the user to the db
-    if (isDateValid(date) || (date.length > 1)) {
+    if (isDateValid(date) && isNameValid(name)) {
       
       db.none("INSERT INTO reg_users (users_name, entry_date) VALUES ($1, $2);", [name, date])
-      .then(() => console.info('New User Added'))
+      .then(() => console.info('-----> New User has been added'))
       .catch((error) => console.error(error))
     
     }
@@ -55,19 +55,16 @@ function isDateValid(date) {
   const today = new Date();
 
   // checking if the date makes sense like 40/02/2022 won't pass even though the format looks correct
-  console.log(!isNaN(dateCleared.getDate()))
 
-  return dateCleared !== undefined && dateCleared >= today;
+  return dateCleared instanceof Date && dateCleared >= today;
 }
 
 // generic validation function for the input values
 function isInputValid(input, validateFunction, errorMessage) {
   
-  const clearInput = input.trim();
-  
-  if (!clearInput) {
+  if (!input) {
     console.error("Input cannot be blank.")
-  } else if (!validateFunction(clearInput)) {
+  } else if (!validateFunction(input)) {
     console.error(errorMessage)
   } else {
     console.info("Correct input")
