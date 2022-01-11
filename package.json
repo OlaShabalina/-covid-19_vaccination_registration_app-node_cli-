@@ -1,0 +1,40 @@
+{
+	"name": "Covid_checkin_app",
+	"description": "Covid-19 check-in app",
+	"version": "1.0.0",
+	"license": "UNLICENSED",
+	"bin": {
+		"Covid_checkin_app": "index.js",
+		"New": "index.js"
+	},
+	"author": {
+		"name": "Olga Shabalina",
+		"email": " ",
+		"url": " "
+	},
+	"keywords": [
+		"Covid_checkin_app",
+		"Olga Shabalina"
+	],
+	"files": [
+		"index.js",
+		"utils"
+	],
+	"scripts": {
+		"format": "prettier --write \"./**/*.{js,json}\""
+	},
+	"dependencies": {
+		"chalk": "^5.0.0",
+		"cli-alerts": "^1.2.2",
+		"cli-handle-error": "^4.4.0",
+		"cli-handle-unhandled": "^1.1.1",
+		"cli-meow-help": "^2.0.2",
+		"cli-welcome": "^2.2.2",
+		"dotenv": "^10.0.0",
+		"meow": "^9.0.0",
+		"pg-promise": "^10.11.1"
+	},
+	"devDependencies": {
+		"prettier": "^2.5.1"
+	}
+}
