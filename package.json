@@ -20,7 +20,8 @@
 		"utils"
 	],
 	"scripts": {
-		"format": "prettier --write \"./**/*.{js,json}\""
+		"format": "prettier --write \"./**/*.{js,json}\"",
+		"test": "jest --coverage"
 	},
 	"dependencies": {
 		"chalk": "^5.0.0",
@@ -37,6 +38,7 @@
 		"prompt-sync": "^4.1.6"
 	},
 	"devDependencies": {
+		"jest": "^27.4.7",
 		"prettier": "^2.5.1"
 	}
 }

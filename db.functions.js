@@ -2,9 +2,6 @@
 const db = require('./database');
 const prompt = require('prompt-sync')(); // for user accepting input
 const vd = require('give-me-date'); // to validate the date input
-const { check } = require('prettier');
-const { proc } = require('./database');
-const { white } = require('cli-handle-error/node_modules/chalk');
 
 // setting up format for the input
 const options = {
@@ -34,9 +31,9 @@ function addUser() {
     } while (!isDateValid(date) || (date.length < 1));
     
 
-    // only if both inputs are valid - we same the user to the db
+    // only if both inputs are valid - we proceed to the next step - save the user to the db
     if (isDateValid(date) && isNameValid(name)) {
-      
+
       db.none("INSERT INTO reg_users (users_name, entry_date) VALUES ($1, $2);", [name, date])
       .then(() => {
 
@@ -45,27 +42,30 @@ function addUser() {
 
         let showList = prompt('Would you like to see the full list of checked in users?: (Y/N): ')
 
-        // // will keep asking the user till them make a decision
-        // do {
-        //   showList = prompt('Please reply Y or N: ');
-        // } while (!showList || showList.trim().toLowerCase() !== 'y' || showList.trim().toLowerCase() !== 'n');
-
-        // once the user made a decision we have options
-        if (showList && showList.trim().toLowerCase() === 'y') {
+        // if user enters something different from y and n, we will keep prompting him
+        if (!showList || showList && showList.trim().toLowerCase() !== 'y' && showList.trim().toLowerCase() !== 'n') {
+          
+          do {
+            showList = prompt('Please reply Y or N: ');
+          } while (!showList && (showList.trim().toLowerCase() !== 'y' || showList.trim().toLowerCase() !== 'n'));
+        
+        // scenarios for Y and N
+        } else if (showList && showList.trim().toLowerCase() === 'y') {
           listUsers();
+          
         } else if (showList && showList.trim().toLowerCase() === 'n') {
           console.log('\x1b[36m%s\x1b[0m', 'No worries, feel free to do something else here!')
         }
 
       })
       .catch((error) => console.error(error))
+      .finally(() => process.exit(0)); 
     
     }
 
   }
   
 }
-
 
 //  function to validate name input (no special characters)
 
@@ -77,18 +77,20 @@ function isNameValid(name) {
 function isDateValid(date) {
 
   // check if the data is indeed a date by using validator
-
-  if (vd.validate(date, options)) {
+  if (vd.validate(String(date), options)) {
 
     //  date can only be today or later
     let dateArray = date.split('/');
 
     const dateCleared = new Date(`${dateArray[2]}-${dateArray[1]}-${dateArray[0]}`);
-    const today = new Date();
+    const today = new Date(new Date().toDateString()); // making sure there is no time attached
 
-    return dateCleared instanceof Date && dateCleared >= today;
+    return dateCleared >= today;
 
-  } 
+  } else {
+
+    return false
+  }
 
 }
 
@@ -96,9 +98,9 @@ function isDateValid(date) {
 function isInputValid(input, validateFunction, errorMessage) {
   
   if (!input) {
-    console.error('\x1b[31m%s\x1b[0m', 'Input cannot be blank.')
+    console.info('\x1b[31m%s\x1b[0m', 'Input cannot be blank.')
   } else if (!validateFunction(input)) {
-    console.error('\x1b[31m%s\x1b[0m', errorMessage)
+    console.info('\x1b[31m%s\x1b[0m', errorMessage)
   } else {
     console.info('\x1b[33m%s\x1b[0m','Correct input')
   } 
@@ -111,17 +113,21 @@ const listUsers = () => {
 
 
 			console.info('\x1b[36m%s\x1b[0m',`     Users checked-in: (${users.length} in total)`);
-			// print out a list of users by looping through the data:
-			users.forEach(user => {
-				console.info(`Name: ${user.users_name}. Check-in date: ${user.reg_date}`);
-			})
+
+      // print the list of users
+      const structDatas = users.map(user => ({ Name: user.users_name, Date: user.reg_date }))
+      console.table(structDatas);
 			
 		})
-		.catch((error) => console.error(error));
+		.catch((error) => console.error(error))
+    .finally(() => process.exit(0));
 }
 
 // Export All Methods
 module.exports = {
   addUser,
-  listUsers
+  listUsers,
+  isInputValid,
+  isDateValid,
+  isNameValid
 }
