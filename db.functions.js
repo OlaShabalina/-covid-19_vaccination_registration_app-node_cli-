@@ -27,7 +27,7 @@ function addUser() {
 
     do {
       date = prompt('Please enter your check-in date: ');
-      isInputValid(date, isDateValid, "Please enter a real date (today or in furure)");
+      isInputValid(date, isDateValid, "Please enter a real date (today or in future)");
     } while (!isDateValid(date) || (date.length < 1));
     
 
@@ -58,9 +58,7 @@ function addUser() {
         }
 
       })
-      .catch((error) => console.error(error))
-      .finally(() => process.exit(0)); 
-    
+      .catch((error) => console.error(error));
     }
 
   }

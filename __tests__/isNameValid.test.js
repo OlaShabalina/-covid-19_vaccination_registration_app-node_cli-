@@ -1,4 +1,4 @@
-const { isNameValid } = require('../db.functions');
+const { isNameValid } = require('../db.functions'); 
 
 test(`name should not contain special characters`, () => {
   expect(isNameValid("Test!@#")).toBe(false)

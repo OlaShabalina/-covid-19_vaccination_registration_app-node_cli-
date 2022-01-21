@@ -7,7 +7,8 @@ const log = require('./utils/log');
 // inmporting request functions (add new user and list of users)
 const {
 	addUser,
-  listUsers
+  listUsers,
+	generatePictureOfRichardAndSean
 } = require('./db.functions');
 
 const input = cli.input;
@@ -29,6 +30,5 @@ const { clear, debug } = flags;
 	if (input.includes('new')) {
 		addUser();
 	}
-
 
 })();

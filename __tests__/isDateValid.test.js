@@ -1,7 +1,6 @@
 const { isDateValid } = require('../db.functions');
 
 test(`input should be a date and the date can only be today or in future`, () => {
-  const today = new Date(new Date().toDateString());
   expect(isDateValid("1233233123")).toBe(false)
   expect(isDateValid("hello")).toBe(false)
   expect(isDateValid("12/01/2023")).toBe(true)
